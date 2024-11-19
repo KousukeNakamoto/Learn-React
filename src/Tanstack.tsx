@@ -1,4 +1,6 @@
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { Item } from "./item";
+import { Suspense } from "react";
 
 export const Tanstack = () => {
   const { data } = useSuspenseQuery({
@@ -19,7 +21,9 @@ export const Tanstack = () => {
       <div>data fetch</div>
       <ul>
         {data.map((user: any) => (
-          <div key={user.id}>{user.name}</div>
+          <Suspense key={user.id} fallback={<div>loadingaaa</div>}>
+            <Item id={user.id} />
+          </Suspense>
         ))}
       </ul>
     </div>
