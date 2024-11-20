@@ -13,21 +13,16 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AboutImport } from './routes/about'
 import { Route as todoUsersImport } from './routes/(todo)/users'
 import { Route as todoUsersDashboardImport } from './routes/(todo)/users/dashboard'
+import { Route as todoUsersPostIndexImport } from './routes/(todo)/users/post/index'
+import { Route as todoUsersPostUserIdImport } from './routes/(todo)/users/post/$userId'
 
 // Create Virtual Routes
 
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
-
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
@@ -47,6 +42,18 @@ const todoUsersDashboardRoute = todoUsersDashboardImport.update({
   getParentRoute: () => todoUsersRoute,
 } as any)
 
+const todoUsersPostIndexRoute = todoUsersPostIndexImport.update({
+  id: '/post/',
+  path: '/post/',
+  getParentRoute: () => todoUsersRoute,
+} as any)
+
+const todoUsersPostUserIdRoute = todoUsersPostUserIdImport.update({
+  id: '/post/$userId',
+  path: '/post/$userId',
+  getParentRoute: () => todoUsersRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -56,13 +63,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
     '/(todo)/users': {
@@ -79,6 +79,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof todoUsersDashboardImport
       parentRoute: typeof todoUsersImport
     }
+    '/(todo)/users/post/$userId': {
+      id: '/(todo)/users/post/$userId'
+      path: '/post/$userId'
+      fullPath: '/users/post/$userId'
+      preLoaderRoute: typeof todoUsersPostUserIdImport
+      parentRoute: typeof todoUsersImport
+    }
+    '/(todo)/users/post/': {
+      id: '/(todo)/users/post/'
+      path: '/post'
+      fullPath: '/users/post'
+      preLoaderRoute: typeof todoUsersPostIndexImport
+      parentRoute: typeof todoUsersImport
+    }
   }
 }
 
@@ -86,10 +100,14 @@ declare module '@tanstack/react-router' {
 
 interface todoUsersRouteChildren {
   todoUsersDashboardRoute: typeof todoUsersDashboardRoute
+  todoUsersPostUserIdRoute: typeof todoUsersPostUserIdRoute
+  todoUsersPostIndexRoute: typeof todoUsersPostIndexRoute
 }
 
 const todoUsersRouteChildren: todoUsersRouteChildren = {
   todoUsersDashboardRoute: todoUsersDashboardRoute,
+  todoUsersPostUserIdRoute: todoUsersPostUserIdRoute,
+  todoUsersPostIndexRoute: todoUsersPostIndexRoute,
 }
 
 const todoUsersRouteWithChildren = todoUsersRoute._addFileChildren(
@@ -98,44 +116,61 @@ const todoUsersRouteWithChildren = todoUsersRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/about': typeof AboutRoute
   '/users': typeof todoUsersRouteWithChildren
   '/users/dashboard': typeof todoUsersDashboardRoute
+  '/users/post/$userId': typeof todoUsersPostUserIdRoute
+  '/users/post': typeof todoUsersPostIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
-  '/about': typeof AboutRoute
   '/users': typeof todoUsersRouteWithChildren
   '/users/dashboard': typeof todoUsersDashboardRoute
+  '/users/post/$userId': typeof todoUsersPostUserIdRoute
+  '/users/post': typeof todoUsersPostIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
-  '/about': typeof AboutRoute
   '/(todo)/users': typeof todoUsersRouteWithChildren
   '/(todo)/users/dashboard': typeof todoUsersDashboardRoute
+  '/(todo)/users/post/$userId': typeof todoUsersPostUserIdRoute
+  '/(todo)/users/post/': typeof todoUsersPostIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/users' | '/users/dashboard'
+  fullPaths:
+    | '/'
+    | '/users'
+    | '/users/dashboard'
+    | '/users/post/$userId'
+    | '/users/post'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/users' | '/users/dashboard'
-  id: '__root__' | '/' | '/about' | '/(todo)/users' | '/(todo)/users/dashboard'
+  to:
+    | '/'
+    | '/users'
+    | '/users/dashboard'
+    | '/users/post/$userId'
+    | '/users/post'
+  id:
+    | '__root__'
+    | '/'
+    | '/(todo)/users'
+    | '/(todo)/users/dashboard'
+    | '/(todo)/users/post/$userId'
+    | '/(todo)/users/post/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  AboutRoute: typeof AboutRoute
   todoUsersRoute: typeof todoUsersRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  AboutRoute: AboutRoute,
   todoUsersRoute: todoUsersRouteWithChildren,
 }
 
@@ -150,24 +185,30 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about",
         "/(todo)/users"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
-    "/about": {
-      "filePath": "about.tsx"
-    },
     "/(todo)/users": {
       "filePath": "(todo)/users.tsx",
       "children": [
-        "/(todo)/users/dashboard"
+        "/(todo)/users/dashboard",
+        "/(todo)/users/post/$userId",
+        "/(todo)/users/post/"
       ]
     },
     "/(todo)/users/dashboard": {
       "filePath": "(todo)/users/dashboard.tsx",
+      "parent": "/(todo)/users"
+    },
+    "/(todo)/users/post/$userId": {
+      "filePath": "(todo)/users/post/$userId.tsx",
+      "parent": "/(todo)/users"
+    },
+    "/(todo)/users/post/": {
+      "filePath": "(todo)/users/post/index.tsx",
       "parent": "/(todo)/users"
     }
   }

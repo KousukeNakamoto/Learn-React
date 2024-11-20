@@ -1,43 +1,16 @@
 import { QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
-  createRouter,
   Link,
   Outlet,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { routeTree } from "../routeTree.gen";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-// export const Route = createRootRoute({
-//   component: () => (
-//     <>
-//       <div className="p-2 flex space-x-4">
-//         <Link to="/" className="[&.active]:font-bold">
-//           Home
-//         </Link>
-//         {/* <Link
-//           to="/posts/$id"
-//           params={{
-//             id: "sdgf",
-//           }}
-//           className="[&.active]:font-bold"
-//         >
-//           Posts
-//         </Link> */}
-//         <Link to="/user/foo">user</Link>
-//       </div>
-//       <hr />
-//       <Outlet />
-//       <TanStackRouterDevtools />
-//     </>
-//   ),
-// });
-
 interface MyRouterContext {
   queryClient: QueryClient;
 }
 
+//routeTreeで使うためにexportしている
+//createRootRouteWithContextを使うことでloaderなどでcontextを受け取れる
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
@@ -45,16 +18,18 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         <Link to="/" className="[&.active]:font-bold">
           Home
         </Link>
-        {/* <Link
-          to="/posts/$id"
+        <Link to="/users/post" className="[&.active]:font-bold">
+          Post index
+        </Link>
+        {/* <Link to="/users/dashboard">dashboard</Link> */}
+        <Link
+          to="/users/post/$userId"
           params={{
-            id: "sdgf",
+            userId: "1",
           }}
-          className="[&.active]:font-bold"
         >
-          Posts
-        </Link> */}
-        <Link to="/users/dashboard"></Link>
+          post
+        </Link>
       </div>
       <hr />
       <Outlet />
