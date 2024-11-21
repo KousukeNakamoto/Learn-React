@@ -6,6 +6,7 @@ import { delay } from "../../users";
 export const Route = createFileRoute("/(todo)/users/post/$userId")({
   component: RouteComponent,
   pendingComponent: Pending,
+  errorComponent: PendingA,
   loader: ({ context, params }) => {
     context.queryClient.ensureQueryData({
       queryKey: ["post", params.userId],
@@ -23,6 +24,9 @@ export const Route = createFileRoute("/(todo)/users/post/$userId")({
 // export const postQueryOption = queryOptions();
 function Pending() {
   return <div>user id pending</div>;
+}
+function PendingA() {
+  return <div>error</div>;
 }
 function RouteComponent() {
   const params = Route.useParams();

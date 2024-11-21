@@ -1,12 +1,30 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { Link, Outlet } from "@tanstack/react-router";
+import {
+  getRouteApi,
+  Link,
+  Outlet,
+  useChildMatches,
+  useLocation,
+  useParams,
+  useRouter,
+} from "@tanstack/react-router";
 import { usersQueryOptions } from "../../../routes/(todo)/users";
 import { Suspense } from "react";
 import { Test } from "./components/Text";
 
+const route = getRouteApi("/(todo)/users");
+// console.log("🚀 ~ route:", route);
+
 function Users() {
   const { data } = useSuspenseQuery(usersQueryOptions);
-  console.log("render");
+  const router = useRouter();
+  const params = useParams({ from: "/(todo)/users" });
+  const location = useLocation();
+  const childMatches = useChildMatches();
+  // console.log("🚀 ~ Users ~ childMatches:", childMatches);
+  // console.log("🚀 ~ Users ~ location:", location);
+  // console.log("🚀 ~ Users ~ params:", params);
+  // console.log("🚀 ~ Users ~ router:", router);
 
   return (
     <div className="flex min-h-screen">
