@@ -2,7 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { testQueryOptions } from "../../../../routes/(todo)/users";
 
 export const Test = () => {
-  const { data, error, isPending } = useSuspenseQuery(testQueryOptions);
+  const { data, error, isPending } = useSuspenseQuery({ queryKey: ["test"] });
   console.log(1000);
 
   //↓意味ない

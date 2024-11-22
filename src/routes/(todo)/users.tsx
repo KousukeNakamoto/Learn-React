@@ -24,7 +24,7 @@ export const testQueryOptions = queryOptions({
     // 数秒遅延（例: 3秒）
     await delay(6000);
     const res = await fetch("https://jsonplaceholder.typicode.com/users");
-    throw new Error("aa");
+    // throw new Error("aa");
     return await res.json();
   },
 });

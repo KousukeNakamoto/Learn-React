@@ -18,7 +18,7 @@ const route = getRouteApi("/(todo)/users");
 // console.log("🚀 ~ route:", route);
 
 function Users() {
-  const { data } = useSuspenseQuery(usersQueryOptions);
+  const { data } = useSuspenseQuery<any>({ queryKey: ["users"] });
   const router = useRouter();
   const params = useParams({ from: "/(todo)/users" });
   const location = useLocation();
