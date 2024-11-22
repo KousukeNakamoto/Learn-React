@@ -11,6 +11,8 @@ import {
 import { usersQueryOptions } from "../../../routes/(todo)/users";
 import { Suspense } from "react";
 import { Test } from "./components/Text";
+import { ErrorBoundary } from "react-error-boundary";
+import { ErrorCmp } from "../../../components/Error";
 
 const route = getRouteApi("/(todo)/users");
 // console.log("🚀 ~ route:", route);
@@ -43,9 +45,11 @@ function Users() {
             </Link>
           ))}
         </ul>
-        <Suspense fallback={<div>loading...</div>}>
-          <Test />
-        </Suspense>
+        <ErrorBoundary fallback={<ErrorCmp />}>
+          <Suspense fallback={<div>loading...</div>}>
+            <Test />
+          </Suspense>
+        </ErrorBoundary>
       </div>
       <div className="flex-1">
         <Outlet />
